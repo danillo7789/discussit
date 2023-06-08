@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-     'whitenoise.runserver_nostatic',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     
     'base.apps.BaseConfig',
@@ -98,6 +98,7 @@ DATABASES = {
         'PASSWORD': env('POSTRES_PASSWORD'),
         'HOST': env('POSTRES_HOST'),
         'PORT': env('POSTRES_PORT'),
+        'URL': env('POSTGRES_URL'),
     }
 }
 

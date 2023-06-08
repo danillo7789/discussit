@@ -77,15 +77,14 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 
-
+#do not allow user to send message without login
 def room(request, pk):
     room = Room.objects.get(id = pk)
     #to get all child properties in a many to one, varible.nameOfChildModel_set.all(), many2many is just .all()
     room_messages = room.message_set.all() #.order_by('-created')
     participants = room.participants.all()
 
- 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user:
         message = Message.objects.create(
             user = request.user,
             room = room,
