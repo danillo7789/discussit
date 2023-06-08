@@ -8,9 +8,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .models import Room, Topic, Message
 from .forms import RoomForm, UserForm
+from django.views.decorators.csrf import csrf_protect
 
 
-
+@csrf_protect
 def loginUser(request):
     page = 'login'
     #once a user is logged in, he shouldn't be able to go to d login page manually again
@@ -42,7 +43,7 @@ def logoutUser(request):
     return redirect('home')
 
 
-
+@csrf_protect
 def registerPage(request):
     form = UserCreationForm()
 
@@ -78,6 +79,7 @@ def home(request):
 
 
 #do not allow user to send message without login
+@csrf_protect
 def room(request, pk):
     room = Room.objects.get(id = pk)
     #to get all child properties in a many to one, varible.nameOfChildModel_set.all(), many2many is just .all()
@@ -97,6 +99,7 @@ def room(request, pk):
     return render(request, 'base/room.html', context)
 
 
+@login_required(login_url='login')
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     room_messages = user.message_set.all()
@@ -105,7 +108,7 @@ def userProfile(request, pk):
     context = {'user': user, 'rooms': rooms, 'room_messages': room_messages, 'topics': topics}
     return render(request, 'base/profile.html', context)
 
-
+@csrf_protect
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm() 
@@ -126,7 +129,7 @@ def createRoom(request):
     return render(request, 'base/room_form.html', context)
 
 
-
+@csrf_protect
 @login_required(login_url='login')
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
@@ -149,7 +152,7 @@ def updateRoom(request, pk):
     return render(request, 'base/room_form.html', context)
 
 
-
+@csrf_protect
 @login_required(login_url='login')
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
@@ -163,6 +166,7 @@ def deleteRoom(request, pk):
     return render(request, 'base/delete.html', {'obj': room})
 
 
+@csrf_protect
 @login_required(login_url='login')
 def deleteMessage(request, pk):
     message = Message.objects.get(id=pk)
@@ -174,6 +178,7 @@ def deleteMessage(request, pk):
     return render(request, 'base/delete.html', {'obj': message})
 
 
+@csrf_protect
 @login_required(login_url='login')
 def updateUser(request, user):
     user = request.user
