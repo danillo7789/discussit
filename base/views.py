@@ -61,7 +61,7 @@ def registerPage(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 
-
+@csrf_protect
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None   else ''
 
@@ -98,7 +98,7 @@ def room(request, pk):
     context = {'room': room, 'room_messages': room_messages, 'participants': participants}
     return render(request, 'base/room.html', context)
 
-
+@csrf_protect
 @login_required(login_url='login')
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
@@ -190,13 +190,13 @@ def updateUser(request, user):
             return redirect('user-profile', pk=user.id)
     return render(request, 'base/update_user.html', {'form': form})
 
-
+@csrf_protect
 def mobileTopics(request):
     q = request.GET.get('q') if request.GET.get('q') != None   else ''
     topics = Topic.objects.filter(name__icontains=q)
     return render(request, 'base/mobile_topics.html', {'topics': topics})
 
-
+@csrf_protect
 def mobileActivity(request):
     room_messages = Message.objects.all()
     return render(request, 'base/mobile_activity.html', {'room_messages': room_messages})
