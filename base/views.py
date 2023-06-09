@@ -86,6 +86,9 @@ def room(request, pk):
     room_messages = room.message_set.all() #.order_by('-created')
     participants = room.participants.all()
 
+    if request.method == 'POST' and not request.user.is_authenticated:
+        return redirect('login')
+
     if request.method == 'POST' and request.user:
         message = Message.objects.create(
             user = request.user,
@@ -94,7 +97,6 @@ def room(request, pk):
         )
         room.participants.add(request.user)
         return redirect('room', pk=room.id)
-
     context = {'room': room, 'room_messages': room_messages, 'participants': participants}
     return render(request, 'base/room.html', context)
 
