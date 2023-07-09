@@ -4,7 +4,6 @@ environ.Env.read_env()
 
 import os
 
-
 """
 Django settings for studybud project.
 
